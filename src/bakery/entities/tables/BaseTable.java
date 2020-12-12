@@ -110,6 +110,8 @@ public abstract class BaseTable implements Table {
             bill += drink.getPrice();
         }
 
+        bill += this.pricePerPerson * numberOfPeople;
+
         return bill;
     }
 
