@@ -34,6 +34,11 @@ public class ControllerImpl implements Controller {
 
     @Override
     public String addFood(String type, String name, double price) {
+
+        if (foodRepository.getByName(name) != null) {
+            throw new IllegalArgumentException(String.format(ExceptionMessages.FOOD_OR_DRINK_EXIST, type, name));
+        }
+
         BakedFood food = null;
 
         switch (type) {
@@ -45,9 +50,6 @@ public class ControllerImpl implements Controller {
                 break;
         }
 
-        if (foodRepository.getAll().contains(food)) {
-            throw new IllegalArgumentException(String.format(ExceptionMessages.FOOD_OR_DRINK_EXIST, type, name));
-        }
 
         this.foodRepository.add(food);
         return String.format(OutputMessages.FOOD_ADDED, name, type);
@@ -55,6 +57,10 @@ public class ControllerImpl implements Controller {
 
     @Override
     public String addDrink(String type, String name, int portion, String brand) {
+        if (drinkRepository.getByNameAndBrand(name, brand) != null) {
+            throw new IllegalArgumentException(String.format(ExceptionMessages.FOOD_OR_DRINK_EXIST, type, name));
+        }
+
         Drink drink = null;
 
         switch (type) {
@@ -66,9 +72,6 @@ public class ControllerImpl implements Controller {
                 break;
         }
 
-        if (drinkRepository.getAll().contains(drink)) {
-            throw new IllegalArgumentException(String.format(ExceptionMessages.FOOD_OR_DRINK_EXIST, type, name));
-        }
 
         this.drinkRepository.add(drink);
 
@@ -77,6 +80,10 @@ public class ControllerImpl implements Controller {
 
     @Override
     public String addTable(String type, int tableNumber, int capacity) {
+        if (tableTableRepository.getByNumber(tableNumber) != null) {
+            throw new IllegalArgumentException(String.format(ExceptionMessages.TABLE_EXIST, tableNumber));
+        }
+
         Table table = null;
 
         switch (type) {
@@ -86,10 +93,6 @@ public class ControllerImpl implements Controller {
             case "OutsideTable":
                 table = new OutsideTable(tableNumber, capacity);
                 break;
-        }
-
-        if (tableTableRepository.getAll().contains(table)) {
-            throw new IllegalArgumentException(String.format(ExceptionMessages.TABLE_EXIST, tableNumber));
         }
 
         this.tableTableRepository.add(table);
@@ -109,7 +112,7 @@ public class ControllerImpl implements Controller {
         }
 
         if (currentTable == null) {
-            return String.format(OutputMessages.WRONG_TABLE_NUMBER, numberOfPeople);
+            return String.format(OutputMessages.RESERVATION_NOT_POSSIBLE, numberOfPeople);
         }
 
         currentTable.reserve(numberOfPeople);
@@ -138,7 +141,7 @@ public class ControllerImpl implements Controller {
         Table table = tableTableRepository.getByNumber(tableNumber);
         Drink drink = drinkRepository.getByNameAndBrand(drinkName, drinkBrand);
 
-        if (table == null) {
+        if (table == null || !table.isReserved()) {
             return String.format(OutputMessages.WRONG_TABLE_NUMBER, tableNumber);
         }
 

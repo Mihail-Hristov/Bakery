@@ -16,7 +16,7 @@ public abstract class BaseDrink implements Drink {
         this.setBrand(brand);
     }
 
-    protected void setName(String name) {
+    private void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException(ExceptionMessages.INVALID_NAME);
         }
@@ -24,7 +24,7 @@ public abstract class BaseDrink implements Drink {
         this.name = name;
     }
 
-    protected void setPortion(int portion) {
+    private void setPortion(int portion) {
         if (portion <= 0) {
             throw new IllegalArgumentException(ExceptionMessages.INVALID_PORTION);
         }
@@ -32,7 +32,7 @@ public abstract class BaseDrink implements Drink {
         this.portion = portion;
     }
 
-    protected void setPrice(double price) {
+    private void setPrice(double price) {
         if (price <= 0) {
             throw new IllegalArgumentException(ExceptionMessages.INVALID_PRICE);
         }
@@ -40,7 +40,7 @@ public abstract class BaseDrink implements Drink {
         this.price = price;
     }
 
-    protected void setBrand(String brand) {
+    private void setBrand(String brand) {
         if (brand == null || brand.trim().isEmpty()) {
             throw new IllegalArgumentException(ExceptionMessages.INVALID_BRAND);
         }

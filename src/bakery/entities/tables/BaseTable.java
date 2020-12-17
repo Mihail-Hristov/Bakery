@@ -6,11 +6,12 @@ import bakery.entities.drinks.interfaces.Drink;
 import bakery.entities.tables.interfaces.Table;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public abstract class BaseTable implements Table {
-    private List<BakedFood> foodOrders;
-    private List<Drink> drinkOrders;
+    private Collection<BakedFood> foodOrders;
+    private Collection<Drink> drinkOrders;
     private int tableNumber;
     private int capacity;
     private int numberOfPeople;
@@ -24,6 +25,7 @@ public abstract class BaseTable implements Table {
         this.setTableNumber(tableNumber);
         this.setCapacity(capacity);
         this.setPricePerPerson(pricePerPerson);
+        this.isReserved = false;
     }
 
 
@@ -32,7 +34,7 @@ public abstract class BaseTable implements Table {
     }
 
     private void setCapacity(int capacity) {
-        if (capacity < 0) {
+        if (capacity <= 0) {
             throw new IllegalArgumentException(ExceptionMessages.INVALID_TABLE_CAPACITY);
         }
 
@@ -49,6 +51,10 @@ public abstract class BaseTable implements Table {
 
     private void setPricePerPerson(double pricePerPerson) {
         this.pricePerPerson = pricePerPerson;
+    }
+
+    private void setPrice(int numberOfPeople) {
+        this.price = this.pricePerPerson * numberOfPeople;
     }
 
 
@@ -74,7 +80,7 @@ public abstract class BaseTable implements Table {
 
     @Override
     public boolean isReserved() {
-        return isReserved;
+        return this.isReserved;
     }
 
     @Override
@@ -110,7 +116,7 @@ public abstract class BaseTable implements Table {
             bill += drink.getPrice();
         }
 
-        bill += this.pricePerPerson * numberOfPeople;
+        bill += this.getPrice();
 
         return bill;
     }

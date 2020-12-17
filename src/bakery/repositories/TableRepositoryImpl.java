@@ -1,24 +1,23 @@
 package bakery.repositories;
 
+import bakery.entities.tables.BaseTable;
 import bakery.entities.tables.interfaces.Table;
-import bakery.repositories.interfaces.Repository;
 import bakery.repositories.interfaces.TableRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class TableRepositoryImpl<T extends Table> implements TableRepository<T> {
-    private List<T> models;
+public class TableRepositoryImpl<T extends Table> extends Repository<T> implements TableRepository<T> {
 
     public TableRepositoryImpl() {
-        this.models = new ArrayList<>();
+        super();
     }
 
     @Override
     public T getByNumber(int number) {
         T table = null;
-        for (T t: models) {
+        for (T t: this.getAll()) {
             if (t.getTableNumber() == number) {
                 table = t;
             }
@@ -26,13 +25,4 @@ public class TableRepositoryImpl<T extends Table> implements TableRepository<T> 
         return table;
     }
 
-    @Override
-    public Collection<T> getAll() {
-        return this.models;
-    }
-
-    @Override
-    public void add(T t) {
-        this.models.add(t);
-    }
 }
